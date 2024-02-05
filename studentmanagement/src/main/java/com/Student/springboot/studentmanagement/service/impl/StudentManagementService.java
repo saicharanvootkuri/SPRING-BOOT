@@ -6,15 +6,15 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.Student.springboot.studentmanagement.entity.StudentEntity;
+import com.Student.springboot.studentmanagement.repository.StudentJpaRepo;
 import com.Student.springboot.studentmanagement.repository.StudentRepository;
-import com.Student.springboot.studentmanagement.service.StudentManagementService;
 
 @Service
-public class StudentManagementServiceImpl implements StudentManagementService {
+public class StudentManagementService implements StudentJpaRepo {
 
 	private final StudentRepository studentRepository;
 
-	public StudentManagementServiceImpl(StudentRepository studentRepository) {
+	public StudentManagementService(StudentRepository studentRepository) {
 		this.studentRepository = studentRepository;
 	}
 

@@ -34,7 +34,7 @@ public class StudentEntity {
 
 	public StudentEntity(long id, String firstName, String lastName, String studentIdNumber,
 			String branch, String mobileNumber) {
-		super();
+		
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;

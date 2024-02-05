@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Student.springboot.studentmanagement.entity.StudentEntity;
-import com.Student.springboot.studentmanagement.service.StudentManagementService;
+import com.Student.springboot.studentmanagement.repository.StudentJpaRepo;
 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
 
-	private final StudentManagementService studentService;
+	private final StudentJpaRepo studentService;
 
-	public StudentController(StudentManagementService studentService) {
+	public StudentController(StudentJpaRepo studentService) {
 		this.studentService = studentService;
 	}
 
