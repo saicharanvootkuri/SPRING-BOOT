@@ -14,27 +14,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Student.springboot.studentmanagement.entity.StudentEntity;
+import com.Student.springboot.studentmanagement.entity.CourseEntity;
 import com.Student.springboot.studentmanagement.repository.StudentJpaRepo;
 
 @RestController
-@RequestMapping("/student")
-public class StudentController {
+@RequestMapping("/studentrelations")
+public class StudentRelationsController {
 
 	private final StudentJpaRepo studentService;
 
-	public StudentController(StudentJpaRepo studentService) {
+	public StudentRelationsController(StudentJpaRepo studentService) {
 		this.studentService = studentService;
 	}
 
 	@GetMapping
-	public List<StudentEntity> findAllStudents() {
+	public List<CourseEntity> findAllStudents() {
 		return studentService.findAllStudents();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<StudentEntity>> findStudentById(@PathVariable("id") Long id) {
-		Optional<StudentEntity> result = studentService.findById(id);
+	public ResponseEntity<Optional<CourseEntity>> findStudentById(@PathVariable("id") Long id) {
+		Optional<CourseEntity> result = studentService.findById(id);
 		if (result.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} else {
@@ -43,13 +43,13 @@ public class StudentController {
 	}
 
 	@PostMapping
-	public StudentEntity saveStudent(@RequestBody StudentEntity studentEntity) {
+	public CourseEntity saveStudent(@RequestBody CourseEntity studentEntity) {
 		return studentService.updateStudent(studentEntity);
 
 	}
 
 	@PutMapping
-	public StudentEntity updateStudent(@RequestBody StudentEntity studentEntity) {
+	public CourseEntity updateStudent(@RequestBody CourseEntity studentEntity) {
 		return studentService.updateStudent(studentEntity);
 	}
 

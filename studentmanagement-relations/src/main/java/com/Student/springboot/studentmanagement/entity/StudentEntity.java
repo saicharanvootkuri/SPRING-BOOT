@@ -1,14 +1,18 @@
 package com.Student.springboot.studentmanagement.entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 //@Data
-@Entity(name = "student")
+@Entity(name = "StudentEntity")
 @Table(name = "students")
 public class StudentEntity {
 
@@ -16,6 +20,9 @@ public class StudentEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "student_id")
 	private long id;
+
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+	private List<CourseEntity> courses;
 
 	@Column(name = "first_name")
 	private String firstName;
