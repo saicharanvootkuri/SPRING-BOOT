@@ -22,9 +22,6 @@ public class StudentEntity {
 	@Column(name = "last_name")
 	private String lastName;
 
-	@Column(name = "blood_group")
-	private String bloodGroup;
-
 	@Column(name = "branch")
 	private String branch;
 
@@ -35,13 +32,12 @@ public class StudentEntity {
 
 	}
 
-	public StudentEntity(long id, String firstName, String lastName, String studentIdNumber, String bloodGroup,
+	public StudentEntity(long id, String firstName, String lastName, String studentIdNumber,
 			String branch, String mobileNumber) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.bloodGroup = bloodGroup;
 		this.branch = branch;
 		this.mobileNumber = mobileNumber;
 	}
@@ -68,14 +64,6 @@ public class StudentEntity {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getBloodGroup() {
-		return bloodGroup;
-	}
-
-	public void setBloodGroup(String bloodGroup) {
-		this.bloodGroup = bloodGroup;
 	}
 
 	public String getBranch() {
