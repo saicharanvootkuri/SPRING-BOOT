@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Student.springboot.studentmanagement.entity.StudentEntity;
+import com.Student.springboot.studentmanagement.entity.Student;
 import com.Student.springboot.studentmanagement.repository.StudentJpaRepo;
 
 @RestController
@@ -28,13 +28,13 @@ public class StudentController {
 	}
 
 	@GetMapping
-	public List<StudentEntity> findAllStudents() {
+	public List<Student> findAllStudents() {
 		return studentService.findAllStudents();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<StudentEntity>> findStudentById(@PathVariable("id") Long id) {
-		Optional<StudentEntity> result = studentService.findById(id);
+	public ResponseEntity<Optional<Student>> findStudentById(@PathVariable("id") Long id) {
+		Optional<Student> result = studentService.findById(id);
 		if (result.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} else {
@@ -43,13 +43,13 @@ public class StudentController {
 	}
 
 	@PostMapping
-	public StudentEntity saveStudent(@RequestBody StudentEntity studentEntity) {
+	public Student saveStudent(@RequestBody Student studentEntity) {
 		return studentService.updateStudent(studentEntity);
 
 	}
 
 	@PutMapping
-	public StudentEntity updateStudent(@RequestBody StudentEntity studentEntity) {
+	public Student updateStudent(@RequestBody Student studentEntity) {
 		return studentService.updateStudent(studentEntity);
 	}
 

@@ -3,12 +3,12 @@ package com.Student.springboot.studentmanagement.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.Student.springboot.studentmanagement.entity.StudentEntity;
+import com.Student.springboot.studentmanagement.entity.Student;
 
 public interface StudentJpaRepo {
-	List<StudentEntity> findAllStudents();
-	Optional<StudentEntity> findById(Long id);
-	StudentEntity saveStudent(StudentEntity studentEntity);
-	StudentEntity updateStudent(StudentEntity studentEntity);
+	List<Student> findAllStudents();
+	Optional<Student> findById(Long id);
+	Student saveStudent(Student studentEntity);
+	Student updateStudent(Student studentEntity);
 	void deleteStudent(Long id);
 }
