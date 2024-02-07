@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Student.springboot.studentmanagement.entity.Student;
 import com.Student.springboot.studentmanagement.repository.StudentJpaRepo;
-
+//Student Controller
 @RestController
 @RequestMapping("/student")
 public class StudentController {
