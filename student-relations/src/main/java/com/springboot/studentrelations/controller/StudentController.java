@@ -3,7 +3,6 @@ package com.springboot.studentrelations.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,44 +14,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Student.springboot.studentmanagement.entity.CourseEntity;
 import com.springboot.studentrelations.entity.Student;
-import com.springboot.studentrelations.serviceImpl.StudentService;
+import com.springboot.studentrelations.repository.StudentJpaRepository;
 
-	@RestController
-	@RequestMapping("/students")
-	public class StudentController {
+@RestController
+@RequestMapping("/students")
+public class StudentController {
 
-	    @Autowired
-	    private StudentService studentService;
+    private final StudentJpaRepository studentRepository;
 
-	    // Get all students
-	    @GetMapping
-	    public List<Student> getAllStudents() {
-	        return studentService.getAllStudents();
-	    }
+    public StudentController(StudentJpaRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
-	    // Get student by ID
-	    @GetMapping("/{id}")
-	    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-	        Optional<Student> student = studentService.getStudentById(id);
-	        return student.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-	                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-	    }
+    @GetMapping
+    public List<Student> findAllStudents() {
+        return studentRepository.findAll();
+    }
 
-	    @PostMapping
-		public CourseEntity saveStudent(@RequestBody CourseEntity studentEntity) {
-			return studentService.updateStudent(studentEntity);
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Student>> findStudentById(@PathVariable("id") Long id) {
+        Optional<Student> result = studentRepository.findById(id);
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.FOUND).body(result);
+        }
+    }
 
-		}
+    @PostMapping
+    public Student saveStudent(@RequestBody Student student) {
+        return studentRepository.save(student);
+    }
 
-		@PutMapping
-		public CourseEntity updateStudent(@RequestBody CourseEntity studentEntity) {
-			return studentService.updateStudent(studentEntity);
-		}
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") Long id, @RequestBody Student student) {
+        Optional<Student> existingStudent = studentRepository.findById(id);
+        if (existingStudent.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+            student.setId(id);
+            Student updatedStudent = studentRepository.save(student);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedStudent);
+        }
+    }
 
-		@DeleteMapping("/{id}")
-		public void deleteStudent(@PathVariable("id") Long id) {
-			studentService.deleteStudent(id);
-		}
-	}
+    @DeleteMapping("/{id}")
+    public void deleteStudent(@PathVariable("id") Long id) {
+        studentRepository.deleteById(id);
+    }
+}
