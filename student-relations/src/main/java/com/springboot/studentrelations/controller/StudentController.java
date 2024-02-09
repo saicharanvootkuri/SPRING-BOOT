@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.studentrelations.Dtos.StudentDTO;
+import com.springboot.studentrelations.entity.StudentEntity;
 import com.springboot.studentrelations.repository.StudentService;
 
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class StudentController {
 	private final StudentService studentService;
 
 	@GetMapping
-	public List<StudentDTO> findAllStudents() {
+	public List<StudentEntity> findAllStudents() {
 		return studentService.findAllStudents();
 	}
 

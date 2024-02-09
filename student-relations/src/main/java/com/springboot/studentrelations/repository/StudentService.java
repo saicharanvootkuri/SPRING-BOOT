@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springboot.studentrelations.Dtos.StudentDTO;
+import com.springboot.studentrelations.entity.StudentEntity;
 
 public interface StudentService {
-	List<StudentDTO> findAllStudents();
+	List<StudentEntity> findAllStudents();
 
 	Optional<StudentDTO> findStudentById(Long id);
 
