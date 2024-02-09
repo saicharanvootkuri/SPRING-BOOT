@@ -3,7 +3,6 @@ package com.springboot.studentrelations.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,43 +17,41 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.studentrelations.Dtos.CourseDTO;
 import com.springboot.studentrelations.repository.CourseService;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 @RequestMapping("/courses")
 public class CourseController {
-	@Autowired 
-    private final CourseService courseService;
+	private final CourseService courseService;
 
-    public CourseController(CourseService courseService) {
-        this.courseService = courseService;
-    }
+	@GetMapping
+	public List<CourseDTO> findAllCourses() {
+		return courseService.findAllCourses();
+	}
 
-    @GetMapping
-    public List<CourseDTO> findAllCourses() {
-        return courseService.findAllCourses();
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<Optional<CourseDTO>> findCourseById(@PathVariable("id") Long id) {
+		Optional<CourseDTO> result = courseService.findCourseById(id);
+		if (result.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		} else {
+			return ResponseEntity.status(HttpStatus.FOUND).body(result);
+		}
+	}
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<CourseDTO>> findCourseById(@PathVariable("id") Long id) {
-        Optional<CourseDTO> result = courseService.findCourseById(id);
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } else {
-            return ResponseEntity.status(HttpStatus.FOUND).body(result);
-        }
-    }
+	@PostMapping
+	public CourseDTO saveCourse(@RequestBody CourseDTO courseDTO) {
+		return courseService.saveCourse(courseDTO);
+	}
 
-    @PostMapping
-    public CourseDTO saveCourse(@RequestBody CourseDTO courseDTO) {
-        return courseService.saveCourse(courseDTO);
-    }
+	@PutMapping
+	public CourseDTO updateCourse(@RequestBody CourseDTO courseDTO) {
+		return courseService.updateCourse(courseDTO);
+	}
 
-    @PutMapping
-    public CourseDTO updateCourse(@RequestBody CourseDTO courseDTO) {
-        return courseService.updateCourse(courseDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable("id") Long id) {
-        courseService.deleteCourse(id);
-    }
+	@DeleteMapping("/{id}")
+	public void deleteCourse(@PathVariable("id") Long id) {
+		courseService.deleteCourse(id);
+	}
 }

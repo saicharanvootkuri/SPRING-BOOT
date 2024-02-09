@@ -9,22 +9,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+
 @Data
-@Entity
+@Entity(name = "EnrollmentEntity")
 @Table(name = "enrollments")
 public class EnrollmentEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "enrollment_id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "enrollment_id")
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    private StudentEntity student;
+	@ManyToOne
+	@JoinColumn(name = "student_id", nullable = false)
+	private StudentEntity student;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity course;
+	@ManyToOne
+	@JoinColumn(name = "course_id", nullable = false)
+	private CourseEntity course;
 
 }
