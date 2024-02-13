@@ -1,30 +1,75 @@
-package com.learningportal.learningportal.ServiceImpl;
+package com.learningportal.learningportal.serviceimpl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.learningportal.learningportal.Entity.UserEntity;
-import com.learningportal.learningportal.Repository.UserRepository;
-import com.learningportal.learningportal.Repository.UserService;
+import com.learningportal.learningportal.dto.UserResponseDto;
+import com.learningportal.learningportal.entity.CourseEntity;
+import com.learningportal.learningportal.entity.UserEntity;
+import com.learningportal.learningportal.repository.CourseService;
+import com.learningportal.learningportal.repository.UserRepository;
+import com.learningportal.learningportal.repository.UserService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
-	@Autowired
+
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+	private CourseService courseService;
 	private UserRepository userRepository;
 
 	@Override
-	public UserEntity createUser(UserEntity userEntity) {
-		// Implement logic to create a new user
+	public List<UserEntity> findAllUsers() {
+		logger.info("@UserServiceImpl - Fetching all users.");
+		return userRepository.findAll();
+	}
+
+	@Override
+	public Optional<UserEntity> findUserById(Long id) {
+		logger.info("@UserServiceImpl - Fetching user by id.");
+		return userRepository.findById(id);
+	}
+
+	@Override
+	public UserEntity addUser(UserEntity userEntity) {
+		logger.info("@UserServiceImpl - Adding user to UserRepository.");
 		return userRepository.save(userEntity);
 	}
 
 	@Override
-	public Optional<UserEntity> findUserByUsername(String username) {
-		// Implement logic to find a user by username
-		return userRepository.findByUsername(username);
+	public UserResponseDto userEntitytoDtoMapper(UserEntity userEntity) {
+		logger.info("@UserServiceImpl - UserEntity to UserResponseDTO Mapper.");
+		UserResponseDto userDto = new UserResponseDto();
+		userDto.setId(userEntity.getId());
+		userDto.setName(userEntity.getName());
+		userDto.setRole(userEntity.getRole());
+		if (userEntity.getEnrolledCourses() != null) {
+			userDto.setEnrolledCourses(userEntity.getEnrolledCourses().stream()
+					.map(registration -> courseService.mapCourseEntitytoCourseDto(registration.getCourseEntity()))
+					.collect(Collectors.toList()));
+		}
+		if (userEntity.getFavouriteCourses() != null) {
+			List<CourseEntity> courses = userEntity.getFavouriteCourses().stream()
+					.map(pred -> pred.getCourseFavEntity()).collect(Collectors.toList());
+			userDto.setFavoriteCourses(
+					courses.stream().map(courseService::mapCourseEntitytoCourseDto).collect(Collectors.toList()));
+		}
+		return userDto;
 	}
 
-	// Add other methods as needed for user-related operations
+	@Override
+	public void removeUserById(Long id) {
+		logger.info("@UserServiceImpl - Deleting user by id.");
+		userRepository.deleteById(id);
+		logger.info("@UserServiceImpl - User deleted.");
+	}
+
 }

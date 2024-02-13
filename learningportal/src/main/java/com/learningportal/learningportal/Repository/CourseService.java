@@ -1,21 +1,24 @@
-package com.learningportal.learningportal.Repository;
+package com.learningportal.learningportal.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.learningportal.learningportal.Entity.CourseEntity;
+import com.learningportal.learningportal.dto.CourseResponseDto;
+import com.learningportal.learningportal.entity.CategoryEntity;
+import com.learningportal.learningportal.entity.CourseEntity;
 
 public interface CourseService {
-	List<CourseEntity> findByCategory(String category);
+	public List<CourseEntity> findAllCourse();
 
-	List<CourseEntity> findAllCourses();
+	public Optional<CourseEntity> findCourseById(Long id);
 
-	Optional<CourseEntity> findCourseById(Long id);
+	public CourseEntity addCourse(CourseEntity courseEntity);
 
-	CourseEntity saveCourse(CourseEntity courseEntity);
+	public List<CourseEntity> findCourseByCategory(CategoryEntity categoryEntity);
 
-	CourseEntity updateCourse(CourseEntity courseEntity);
+	public CourseEntity findCourseByAuthor(String author);
 
-	void deleteCourse(Long id);
+	public CourseResponseDto mapCourseEntitytoCourseDto(CourseEntity courseEntity);
 
+	public void deleteCourseById(Long id);
 }

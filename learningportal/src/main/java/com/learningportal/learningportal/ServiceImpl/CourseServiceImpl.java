@@ -1,56 +1,81 @@
-package com.learningportal.learningportal.ServiceImpl;
+package com.learningportal.learningportal.serviceimpl;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.learningportal.learningportal.Entity.CourseEntity;
-import com.learningportal.learningportal.Repository.CourseRepository;
-import com.learningportal.learningportal.Repository.CourseService;
+import com.learningportal.learningportal.dto.CourseResponseDto;
+import com.learningportal.learningportal.entity.CategoryEntity;
+import com.learningportal.learningportal.entity.CourseEntity;
+import com.learningportal.learningportal.repository.CourseRepository;
+import com.learningportal.learningportal.repository.CourseService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class CourseServiceImpl implements CourseService {
 
-	@Autowired
+	private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
+
 	private CourseRepository courseRepository;
 
 	@Override
-	public List<CourseEntity> getAllCourses() {
+	public List<CourseEntity> findAllCourse() {
+		logger.info("@CourseServiceImpl - Fetching all courses.");
 		return courseRepository.findAll();
 	}
 
 	@Override
-	public List<CourseEntity> getCoursesByCategory(String category) {
-		return courseRepository.findByCategory(category);
+	public Optional<CourseEntity> findCourseById(Long id) {
+		logger.info("@CourseServiceImpl - Fetching course by id.");
+		return courseRepository.findById(id);
 	}
 
 	@Override
-	public CourseEntity createCourse(Course course) {
-		return courseRepository.save(course);
+	public CourseEntity addCourse(CourseEntity courseEntity) {
+		logger.info("@CourseServiceImpl - Adding course to CourseRepository.");
+		return courseRepository.save(courseEntity);
 	}
 
 	@Override
-	public CourseEntity getCourseById(Long courseId) {
-		return courseRepository.findById(courseId)
-				.orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
+	public List<CourseEntity> findCourseByCategory(CategoryEntity categoryEntity) {
+		logger.info("@CourseServiceImpl - Finding course by category.");
+		return courseRepository.findByCategoryEntity(categoryEntity);
 	}
 
 	@Override
-	public CourseEntity updateCourse(Long courseId, CourseEntity updatedCourse) {
-		CourseEntity existingCourse = getCourseById(courseId);
-
-		existingCourse.setTitle(updatedCourse.getTitle());
-		existingCourse.setDescription(updatedCourse.getDescription());
-		existingCourse.setCategory(updatedCourse.getCategory());
-
-		return courseRepository.save(existingCourse);
+	public CourseEntity findCourseByAuthor(String author) {
+		logger.info("@CourseServiceImpl - Finding course by author.");
+		return courseRepository.findByAuthor(author);
 	}
 
 	@Override
-	public void deleteCourse(Long courseId) {
-		CourseEntity existingCourse = getCourseById(courseId);
-		courseRepository.delete(existingCourse);
+	public CourseResponseDto mapCourseEntitytoCourseDto(CourseEntity courseEntity) {
+		logger.info("@CourseServiceImpl - CourseEntity to CourseResponseDto Mapper.");
+		CourseResponseDto course = new CourseResponseDto();
+		if (courseEntity == null) {
+			return null;
+		}
+		course.setId(courseEntity.getId());
+		course.setName(courseEntity.getName());
+		course.setAuthor(courseEntity.getAuthor());
+		course.setCategory(courseEntity.getCategoryEntity().getName());
+		course.setDesc(courseEntity.getDesc());
+		course.setEnrolledUsers(courseEntity.getEnrolledUsers().stream().map(pred -> pred.getUserEntity().getName())
+				.collect(Collectors.toList()));
+		course.setEnrolledUserCount(course.getEnrolledUsers().size());
+		return course;
+	}
+
+	@Override
+	public void deleteCourseById(Long id) {
+		logger.info("@CourseServiceImpl - Deleting course by id.");
+		courseRepository.deleteById(id);
+		logger.info("@CourseServiceImpl - Course deleted.");
 	}
 }

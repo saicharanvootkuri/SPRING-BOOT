@@ -17,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @Entity(name = "student")
@@ -40,15 +41,14 @@ public class Student {
 	@Column(name = "mobile_number")
 	private String mobileNumber;
 
+	@JsonFormat(pattern = "MM/dd/yyyy HH:mm")
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
+	@CreatedDate
+	private LocalDateTime createdDate;
 
-@JsonFormat(pattern="MM/dd/yyyy HH:mm")
-@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
-@CreatedDate
-private LocalDateTime createdDate;
-
-@JsonFormat(pattern="MM/dd/yyyy HH:mm")
-@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
-@LastModifiedDate
-private LocalDateTime lastModifiedDate;
+	@JsonFormat(pattern = "MM/dd/yyyy HH:mm")
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
 
 }
